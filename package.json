@@ -1,0 +1,18 @@
+{
+  "name": "fableconf",
+  "version": "1.0.0",
+  "description": "[![Issue Stats](http://issuestats.com/github/fsprojects/FsReveal/badge/issue)](http://issuestats.com/github/fsprojects/FsReveal)\r [![Issue Stats](http://issuestats.com/github/fsprojects/FsReveal/badge/pr)](http://issuestats.com/github/fsprojects/FsReveal)",
+  "main": "publish.js",
+  "repository": {
+    "url": "https://github.com/Zaid-Ajaj/scaling-elmish-programs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
+}
