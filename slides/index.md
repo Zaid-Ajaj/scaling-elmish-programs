@@ -11,7 +11,7 @@
 <br />
 <br />
 
-### Introduction to the techniques of building largs elmish programs from smaller ones
+### Introduction to the techniques of breaking down large elmish programs into smaller ones
 <br />
 <br />
 Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
@@ -44,18 +44,6 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 
 ***
 
-
-### Model - View - Update
-
-#### "Elm - Architecture"
-
- <img src="images/Elm.png" style="background: white;" width=700 />
-
-
- <small>http://danielbachler.de/2016/02/11/berlinjs-talk-about-elm.html</small>
-
-
---- 
 
 ### Model - View - Update
 
