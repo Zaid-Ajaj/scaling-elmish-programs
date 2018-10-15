@@ -27,8 +27,8 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 * Larger programs 
 * Challenges of breaking down programs
    - Breaking down parent state  
-       - Keeping state of the current child
-       - Keeping state of all children 
+       - Keeping state of a single child program
+       - Keeping state of all children programs
    - Child programs (updates, dispatch and commands)
 * Application concerns: Root level vs. deep children
 * Ongoing developements: the good and the lacking
@@ -45,42 +45,87 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 ***
 
 
-### Model - View - Update
+### Basics of Elmish
 
-    // MODEL
+    type State = { Count: int }
 
-    type Model = int
+    type Msg = Increment | Decrement
 
-    type Msg =
-    | Increment
-    | Decrement
+    let init() : State = { Count = 0 } 
 
-    let init() : Model = 0
+    let update msg state = 
+        match msg with 
+        | Increment -> { state with Count = state.Count + 1 }
+        | Decrement -> { state with Count = state.Count - 1 }
 
----
+    let view state dispatch = 
+        div [ ] [ 
+            button [ OnClick (fun _ -> dispatch Increment) ]
+                   [ str "Increment" ]  
+            button [ OnClick (fun _ -> dispatch Decrement) ]
+                   [ str "Decrement" ]
+            h1 [ ] 
+               [ str (sprintf "Count is at %d" state.Count) ] 
+        ]
 
-### Model - View - Update
+***
 
-    // VIEW
+    type Message = 
+        | Increment 
+        | Decrement 
+        | IncrementImmediate
+        | IncrementDelayed 
 
-    let view model dispatch =
-        div []
-            [ button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ]
-              div [] [ str (model.ToString()) ]
-              button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ] ]
+    // update : Msg -> State -> State * Cmd<Msg>
+    let update msg state  = 
+        match msg with 
+        | Increment -> 
+            let nextState = { state with Count = state.Count + 1 }
+            nextState, Cmd.none 
 
----
+        | Decrement ->
+            let nextState = { state with Count = state.Count - 1 }
+            nextState, Cmd.none
 
-### Model - View - Update
+        | IncrementImmediate ->
+            let nextCmd = Cmd.ofMsg Increment 
+            state, nextCmd
 
-    // UPDATE
+        | IncrementDelayed -> 
+            let nextCmd = Cmd.afterTimeout 1000 Increment 
+            state, nextCmd
 
-    let update (msg:Msg) (model:Model) =
-        match msg with
-        | Increment -> model + 1
-        | Decrement -> model - 1
+***
+![counter](images/counter2.0.gif)
+***
 
----
+***
+    | LoadBlogInfo ->
+        let nextState = { state with BlogInfo = Loading }
+        nextState, Http.loadBlogInfo
+        
+    | BlogInfoLoaded (Ok blogInfo) ->
+        let nextState = { state with BlogInfo = Body blogInfo }
+        let setPageTitle title = 
+            Fable.Import.Browser.document.title <- title 
+        nextState, Cmd.attemptFunc setPageTitle blogInfo.BlogTitle (fun ex -> DoNothing)
+        
+    | BlogInfoLoaded (Error errorMsg) ->
+        let nextState = { state with BlogInfo = LoadError errorMsg }
+        nextState, Toastr.error (Toastr.message errorMsg)
+
+    | BlogInfoLoadFailed msg ->
+        let nextState = { state with BlogInfo = LoadError msg }
+        nextState, Cmd.none
+        
+    | NavigateTo page ->
+        let nextUrl = Urls.hashPrefix (pageHash page)
+        state, Urls.newUrl nextUrl
+
+    | DoNothing ->
+        state, Cmd.none
+
+***
 
 ### Model - View - Update
 
