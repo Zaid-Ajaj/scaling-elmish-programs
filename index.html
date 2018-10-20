@@ -69,10 +69,12 @@
 <div class="tip" id="fs21">val msg : Message</div>
 <div class="tip" id="fs22">val nextState : State</div>
 <div class="tip" id="fs23">val nextCmd : &#39;a</div>
-<div class="tip" id="fs24">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
-<div class="tip" id="fs25">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member GetSlice : startIndex:int option * endIndex:int option -&gt; &#39;T list<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
-<div class="tip" id="fs26">val mapi : mapping:(int -&gt; &#39;T -&gt; &#39;U) -&gt; list:&#39;T list -&gt; &#39;U list<br /><br />Full name: Microsoft.FSharp.Collections.List.mapi</div>
-<div class="tip" id="fs27">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
+<div class="tip" id="fs24">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs25">val update : msg:&#39;a -&gt; state:&#39;b -&gt; &#39;c * &#39;d<br /><br />Full name: index.update</div>
+<div class="tip" id="fs26">val msg : &#39;a</div>
+<div class="tip" id="fs27">val state : &#39;b</div>
+<div class="tip" id="fs28">val StartLoading : &#39;a</div>
+<div class="tip" id="fs29">val nextState : &#39;c</div>
 
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">
@@ -109,7 +111,6 @@ Breaking down parent state
 <li>Application concerns: Root level vs. deep children</li>
 <li>Ongoing developements: the good and the lacking</li>
 <li>Resources to learn more</li>
-<li>Word for consultants/trainers</li>
 </ul>
 </section>
 <section >
@@ -160,11 +161,20 @@ Breaking down parent state
         <span class="i">button</span> [ <span class="i">OnClick</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs13', 26)" onmouseover="showTip(event, 'fs13', 26)" class="i">dispatch</span> <span onmouseout="hideTip(event, 'fs6', 27)" onmouseover="showTip(event, 'fs6', 27)" class="i">Decrement</span>) ]
                [ <span class="i">str</span> <span class="s">&quot;Decrement&quot;</span> ]
         <span class="i">h1</span> [ ] 
-           [ <span class="i">str</span> (<span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="i">sprintf</span> <span class="s">&quot;Count is at %d&quot;</span> <span onmouseout="hideTip(event, 'fs12', 29)" onmouseover="showTip(event, 'fs12', 29)" class="i">state</span><span class="o">.</span><span class="i">Count</span>) ] 
+           [ <span class="i">str</span> (<span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="i">sprintf</span> <span class="s">&quot;%d&quot;</span> <span onmouseout="hideTip(event, 'fs12', 29)" onmouseover="showTip(event, 'fs12', 29)" class="i">state</span><span class="o">.</span><span class="i">Count</span>) ] 
     ]
 </code></pre></td>
 </tr>
 </table>
+</section>
+<section >
+<p><img src="images/counter1.0.gif" alt="counter" /></p>
+</section>
+<section >
+<h3>Introducing Commands</h3>
+<ul>
+<li>Async messages schedulers</li>
+</ul>
 </section>
 <section >
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -221,8 +231,7 @@ Breaking down parent state
 </table>
 </section>
 <section >
-<p><img src="images/counter2.0.gif" alt="counter" />
-<em></em>*</p>
+<p><img src="images/counter2.0.gif" alt="counter" /></p>
 </section>
 <section >
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -248,64 +257,35 @@ Breaking down parent state
 <span class="l">21: </span>
 <span class="l">22: </span>
 <span class="l">23: </span>
-<span class="l">24: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">| <span class="i">LoadBlogInfo</span> <span class="k">-&gt;</span>
-    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs10', 61)" onmouseover="showTip(event, 'fs10', 61)" class="i">state</span> <span class="k">with</span> <span class="i">BlogInfo</span> <span class="o">=</span> <span class="i">Loading</span> }
-    <span class="i">nextState</span>, <span class="i">Http</span><span class="o">.</span><span class="i">loadBlogInfo</span>
-    
-| <span class="i">BlogInfoLoaded</span> (<span class="i">Ok</span> <span class="i">blogInfo</span>) <span class="k">-&gt;</span>
-    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs10', 62)" onmouseover="showTip(event, 'fs10', 62)" class="i">state</span> <span class="k">with</span> <span class="i">BlogInfo</span> <span class="o">=</span> <span class="i">Body</span> <span class="i">blogInfo</span> }
-    <span class="k">let</span> <span class="i">setPageTitle</span> <span class="i">title</span> <span class="o">=</span> 
-        <span class="i">Fable</span><span class="o">.</span><span class="i">Import</span><span class="o">.</span><span class="i">Browser</span><span class="o">.</span><span class="i">document</span><span class="o">.</span><span class="i">title</span> <span class="o">&lt;-</span> <span class="i">title</span> 
-    <span class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">attemptFunc</span> <span class="i">setPageTitle</span> <span class="i">blogInfo</span><span class="o">.</span><span class="i">BlogTitle</span> (<span class="k">fun</span> <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">DoNothing</span>)
-    
-| <span class="i">BlogInfoLoaded</span> (<span class="i">Error</span> <span class="i">errorMsg</span>) <span class="k">-&gt;</span>
-    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs10', 63)" onmouseover="showTip(event, 'fs10', 63)" class="i">state</span> <span class="k">with</span> <span class="i">BlogInfo</span> <span class="o">=</span> <span class="i">LoadError</span> <span class="i">errorMsg</span> }
-    <span class="i">nextState</span>, <span class="i">Toastr</span><span class="o">.</span><span class="i">error</span> (<span class="i">Toastr</span><span class="o">.</span><span class="i">message</span> <span class="i">errorMsg</span>)
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs1', 61)" onmouseover="showTip(event, 'fs1', 61)" class="i">State</span> <span class="o">=</span> 
+    | <span class="i">Initial</span>
+    | <span class="i">Loading</span> 
+    | <span class="i">LoadedData</span> <span class="k">of</span> <span class="i">message</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs24', 62)" onmouseover="showTip(event, 'fs24', 62)" class="i">string</span> 
 
-| <span class="i">BlogInfoLoadFailed</span> <span onmouseout="hideTip(event, 'fs21', 64)" onmouseover="showTip(event, 'fs21', 64)" class="i">msg</span> <span class="k">-&gt;</span>
-    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs10', 65)" onmouseover="showTip(event, 'fs10', 65)" class="i">state</span> <span class="k">with</span> <span class="i">BlogInfo</span> <span class="o">=</span> <span class="i">LoadError</span> <span onmouseout="hideTip(event, 'fs21', 66)" onmouseover="showTip(event, 'fs21', 66)" class="i">msg</span> }
-    <span class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
-    
-| <span class="i">NavigateTo</span> <span class="i">page</span> <span class="k">-&gt;</span>
-    <span class="k">let</span> <span class="i">nextUrl</span> <span class="o">=</span> <span class="i">Urls</span><span class="o">.</span><span class="i">hashPrefix</span> (<span class="i">pageHash</span> <span class="i">page</span>)
-    <span onmouseout="hideTip(event, 'fs10', 67)" onmouseover="showTip(event, 'fs10', 67)" class="i">state</span>, <span class="i">Urls</span><span class="o">.</span><span class="i">newUrl</span> <span class="i">nextUrl</span>
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs15', 63)" onmouseover="showTip(event, 'fs15', 63)" class="i">Message</span> <span class="o">=</span> 
+    | <span class="i">StartLoading</span>
+    | <span class="i">ReceivedLoadedData</span> <span class="k">of</span> <span class="i">message</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs24', 64)" onmouseover="showTip(event, 'fs24', 64)" class="i">string</span>
+    | <span class="i">Reset</span>
 
-| <span class="i">DoNothing</span> <span class="k">-&gt;</span>
-    <span onmouseout="hideTip(event, 'fs10', 68)" onmouseover="showTip(event, 'fs10', 68)" class="i">state</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 65)" onmouseover="showTip(event, 'fs25', 65)" class="f">update</span> <span onmouseout="hideTip(event, 'fs26', 66)" onmouseover="showTip(event, 'fs26', 66)" class="i">msg</span> <span onmouseout="hideTip(event, 'fs27', 67)" onmouseover="showTip(event, 'fs27', 67)" class="i">state</span> <span class="o">=</span> 
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs26', 68)" onmouseover="showTip(event, 'fs26', 68)" class="i">msg</span> <span class="k">with</span> 
+    | <span onmouseout="hideTip(event, 'fs28', 69)" onmouseover="showTip(event, 'fs28', 69)" class="i">StartLoading</span> <span class="k">-&gt;</span> 
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 70)" onmouseover="showTip(event, 'fs29', 70)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 71)" onmouseover="showTip(event, 'fs1', 71)" class="i">State</span><span class="o">.</span><span class="i">Loading</span>
+        <span onmouseout="hideTip(event, 'fs29', 72)" onmouseover="showTip(event, 'fs29', 72)" class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">afterTimeout</span> <span class="n">1000</span> (<span class="i">ReceivedLoadedData</span> <span class="s">&quot;Your data is here&quot;</span>)
+
+    | <span class="i">ReceivedLoadedData</span> <span class="i">receivedMessage</span> <span class="k">-&gt;</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 73)" onmouseover="showTip(event, 'fs29', 73)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 74)" onmouseover="showTip(event, 'fs1', 74)" class="i">State</span><span class="o">.</span><span class="i">LoadedData</span> <span class="i">receivedMessage</span>
+        <span onmouseout="hideTip(event, 'fs29', 75)" onmouseover="showTip(event, 'fs29', 75)" class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
+
+    | <span class="i">Reset</span> <span class="k">-&gt;</span> 
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 76)" onmouseover="showTip(event, 'fs29', 76)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 77)" onmouseover="showTip(event, 'fs1', 77)" class="i">State</span><span class="o">.</span><span class="i">Initial</span>
+        <span onmouseout="hideTip(event, 'fs29', 78)" onmouseover="showTip(event, 'fs29', 78)" class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
 </code></pre></td>
 </tr>
 </table>
 </section>
 <section >
-<section >
-<h3>Model - View - Update</h3>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-<span class="l">6: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// wiring things up</span>
-
-<span class="i">Program</span><span class="o">.</span><span class="i">mkSimple</span> <span onmouseout="hideTip(event, 'fs7', 69)" onmouseover="showTip(event, 'fs7', 69)" class="i">init</span> <span onmouseout="hideTip(event, 'fs8', 70)" onmouseover="showTip(event, 'fs8', 70)" class="i">update</span> <span onmouseout="hideTip(event, 'fs11', 71)" onmouseover="showTip(event, 'fs11', 71)" class="i">view</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withConsoleTrace</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmish-app&quot;</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
-</code></pre></td>
-</tr>
-</table>
-</section>
-<section >
-<h3>Model - View - Update</h3>
-<h1>Demo</h1>
-</section>
-</section>
-<section >
-<section >
-<h3>Sub-Components</h3>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -318,167 +298,22 @@ Breaking down parent state
 <span class="l">10: </span>
 <span class="l">11: </span>
 <span class="l">12: </span>
-<span class="l">13: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// MODEL</span>
-
-<span class="k">type</span> <span class="i">Model</span> <span class="o">=</span> {
-    <span class="i">Counters</span> <span class="o">:</span> <span class="i">Counter</span><span class="o">.</span><span class="i">Model</span> <span onmouseout="hideTip(event, 'fs24', 72)" onmouseover="showTip(event, 'fs24', 72)" class="i">list</span>
-}
-
-<span class="k">type</span> <span onmouseout="hideTip(event, 'fs4', 73)" onmouseover="showTip(event, 'fs4', 73)" class="i">Msg</span> <span class="o">=</span> 
-| <span class="i">Insert</span>
-| <span class="i">Remove</span>
-| <span class="i">Modify</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs3', 74)" onmouseover="showTip(event, 'fs3', 74)" class="i">int</span> <span class="o">*</span> <span class="i">Counter</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 75)" onmouseover="showTip(event, 'fs4', 75)" class="i">Msg</span>
-
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 76)" onmouseover="showTip(event, 'fs7', 76)" class="i">init</span>() <span class="o">:</span> <span class="i">Model</span> <span class="o">=</span>
-    { <span class="i">Counters</span> <span class="o">=</span> [] }
-</code></pre></td>
-</tr>
-</table>
-</section>
-<section >
-<h3>Sub-Components</h3>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// VIEW</span>
-
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 77)" onmouseover="showTip(event, 'fs11', 77)" class="i">view</span> <span class="i">model</span> <span class="i">dispatch</span> <span class="o">=</span>
-    <span class="k">let</span> <span class="i">counterDispatch</span> <span class="i">i</span> <span onmouseout="hideTip(event, 'fs21', 78)" onmouseover="showTip(event, 'fs21', 78)" class="i">msg</span> <span class="o">=</span> <span class="i">dispatch</span> (<span class="i">Modify</span> (<span class="i">i</span>, <span onmouseout="hideTip(event, 'fs21', 79)" onmouseover="showTip(event, 'fs21', 79)" class="i">msg</span>))
-
-    <span class="k">let</span> <span class="i">counters</span> <span class="o">=</span>
-        <span class="i">model</span><span class="o">.</span><span class="i">Counters</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 80)" onmouseover="showTip(event, 'fs25', 80)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 81)" onmouseover="showTip(event, 'fs26', 81)" class="i">mapi</span> (<span class="k">fun</span> <span class="i">i</span> <span class="i">c</span> <span class="k">-&gt;</span> <span class="i">Counter</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 82)" onmouseover="showTip(event, 'fs11', 82)" class="i">view</span> <span class="i">c</span> (<span class="i">counterDispatch</span> <span class="i">i</span>)) 
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 79)" onmouseover="showTip(event, 'fs11', 79)" class="f">view</span> <span onmouseout="hideTip(event, 'fs12', 80)" onmouseover="showTip(event, 'fs12', 80)" class="i">state</span> <span onmouseout="hideTip(event, 'fs13', 81)" onmouseover="showTip(event, 'fs13', 81)" class="i">dispatch</span> <span class="o">=</span> 
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs12', 82)" onmouseover="showTip(event, 'fs12', 82)" class="i">state</span> <span class="k">with</span> 
+    | <span onmouseout="hideTip(event, 'fs1', 83)" onmouseover="showTip(event, 'fs1', 83)" class="i">State</span><span class="o">.</span><span class="i">Initial</span> <span class="k">-&gt;</span> 
+        <span class="i">makeButton</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs13', 84)" onmouseover="showTip(event, 'fs13', 84)" class="i">dispatch</span> <span class="i">StartLoading</span>) <span class="s">&quot;Start Loading&quot;</span>
     
-    <span class="i">div</span> [] [ 
-        <span class="k">yield</span> <span class="i">button</span> [ <span class="i">OnClick</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">dispatch</span> <span class="i">Remove</span>) ] [  <span class="i">str</span> <span class="s">&quot;Remove&quot;</span> ]
-        <span class="k">yield</span> <span class="i">button</span> [ <span class="i">OnClick</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">dispatch</span> <span class="i">Insert</span>) ] [ <span class="i">str</span> <span class="s">&quot;Add&quot;</span> ] 
-        <span class="k">yield!</span> <span class="i">counters</span> ]
+    | <span onmouseout="hideTip(event, 'fs1', 85)" onmouseover="showTip(event, 'fs1', 85)" class="i">State</span><span class="o">.</span><span class="i">Loading</span> <span class="k">-&gt;</span> 
+        <span class="i">spinner</span> 
+    
+    | <span onmouseout="hideTip(event, 'fs1', 86)" onmouseover="showTip(event, 'fs1', 86)" class="i">State</span><span class="o">.</span><span class="i">LoadedData</span> <span class="i">message</span> <span class="k">-&gt;</span> 
+        <span class="i">div</span> [ ] 
+            [ <span class="i">showMessage</span> <span class="i">message</span>
+              <span class="i">makeButton</span> (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs13', 87)" onmouseover="showTip(event, 'fs13', 87)" class="i">dispatch</span> <span class="i">Reset</span>) <span class="s">&quot;Reset&quot;</span> ] 
 </code></pre></td>
 </tr>
 </table>
-</section>
-<section >
-<h3>Sub-Components</h3>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// UPDATE</span>
-
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 83)" onmouseover="showTip(event, 'fs8', 83)" class="i">update</span> (<span onmouseout="hideTip(event, 'fs21', 84)" onmouseover="showTip(event, 'fs21', 84)" class="i">msg</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs4', 85)" onmouseover="showTip(event, 'fs4', 85)" class="i">Msg</span>) (<span class="i">model</span><span class="o">:</span><span class="i">Model</span>) <span class="o">=</span>
-    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs21', 86)" onmouseover="showTip(event, 'fs21', 86)" class="i">msg</span> <span class="k">with</span>
-    | <span class="i">Insert</span> <span class="k">-&gt;</span>
-        { <span class="i">Counters</span> <span class="o">=</span> <span class="i">Counter</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 87)" onmouseover="showTip(event, 'fs7', 87)" class="i">init</span>() <span class="o">::</span> <span class="i">model</span><span class="o">.</span><span class="i">Counters</span> }
-    | <span class="i">Remove</span> <span class="k">-&gt;</span>
-        { <span class="i">Counters</span> <span class="o">=</span> 
-            <span class="k">match</span> <span class="i">model</span><span class="o">.</span><span class="i">Counters</span> <span class="k">with</span>
-            | [] <span class="k">-&gt;</span> []
-            | <span class="i">x</span> <span class="o">::</span> <span class="i">rest</span> <span class="k">-&gt;</span> <span class="i">rest</span> }
-    | <span class="i">Modify</span> (<span onmouseout="hideTip(event, 'fs27', 88)" onmouseover="showTip(event, 'fs27', 88)" class="i">id</span>, <span class="i">counterMsg</span>) <span class="k">-&gt;</span>
-        { <span class="i">Counters</span> <span class="o">=</span>
-            <span class="i">model</span><span class="o">.</span><span class="i">Counters</span>
-            <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 89)" onmouseover="showTip(event, 'fs25', 89)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 90)" onmouseover="showTip(event, 'fs26', 90)" class="i">mapi</span> (<span class="k">fun</span> <span class="i">i</span> <span class="i">counterModel</span> <span class="k">-&gt;</span> 
-                <span class="k">if</span> <span class="i">i</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs27', 91)" onmouseover="showTip(event, 'fs27', 91)" class="i">id</span> <span class="k">then</span>
-                    <span class="i">Counter</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 92)" onmouseover="showTip(event, 'fs8', 92)" class="i">update</span> <span class="i">counterMsg</span> <span class="i">counterModel</span>
-                <span class="k">else</span>
-                    <span class="i">counterModel</span>) }
-</code></pre></td>
-</tr>
-</table>
-</section>
-<section >
-<h3>Sub-Components</h3>
-<h1>Demo</h1>
-</section>
-</section>
-<section >
-<section >
-<h3>React</h3>
-<ul>
-<li>Facebook library for UI</li>
-<li><code>state =&gt; view</code></li>
-<li>Virtual DOM</li>
-</ul>
-</section>
-<section >
-<h3>Virtual DOM - Initial</h3>
-<br />
-<br />
-<p><img src="images/onchange_vdom_initial.svg" style="background: white;" /></p>
-<br />
-<br />
-<p><small><a href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html&lt;/small&gt;">http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html</small></a></p>
-</section>
-<section >
-<h3>Virtual DOM - Change</h3>
-<br />
-<br />
-<p><img src="images/onchange_vdom_change.svg" style="background: white;" /></p>
-<br />
-<br />
-<p><small><a href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html&lt;/small&gt;">http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html</small></a></p>
-</section>
-<section >
-<h3>Virtual DOM - Reuse</h3>
-<br />
-<br />
-<p><img src="images/onchange_immutable.svg" style="background: white;" /></p>
-<br />
-<br />
-<p><small><a href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html&lt;/small&gt;">http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html</small></a></p>
-</section>
-</section>
-<section >
-<h3>ReactNative</h3>
-<p><img src="images/ReactNative.png" style="background: white;" /></p>
-<p><small><a href="http://timbuckley.github.io/react-native-presentation&lt;/small&gt;">http://timbuckley.github.io/react-native-presentation</small></a></p>
-</section>
-<section >
-<h3>Show me the code</h3>
-</section>
-<section >
-<h3>TakeAways</h3>
-<ul>
-<li>Learn all the FP you can!</li>
-<li>Simple modular design</li>
-</ul>
-</section>
-<section >
-<h3>Thank you!</h3>
-<ul>
-<li><a href="https://github.com/fable-compiler/fable-elmish">https://github.com/fable-compiler/fable-elmish</a></li>
-<li><a href="https://ionide.io">https://ionide.io</a></li>
-<li><a href="https://facebook.github.io/react-native/">https://facebook.github.io/react-native/</a></li>
-</ul>
 </section>
 
 
