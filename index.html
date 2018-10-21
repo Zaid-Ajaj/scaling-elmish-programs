@@ -173,7 +173,7 @@ Breaking down parent state
 <section >
 <h3>Introducing Commands</h3>
 <ul>
-<li>Async messages schedulers</li>
+<li>Schedule async messages</li>
 </ul>
 </section>
 <section >
@@ -208,7 +208,7 @@ Breaking down parent state
     | <span onmouseout="hideTip(event, 'fs18', 33)" onmouseover="showTip(event, 'fs18', 33)" class="p">IncrementImmediate</span>
     | <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="p">IncrementDelayed</span> 
 
-<span class="c">// update : Msg -&gt; State -&gt; State * Cmd&lt;Msg&gt;</span>
+<span class="c">// update : Message -&gt; State -&gt; State * Cmd&lt;Message&gt;</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 35)" onmouseover="showTip(event, 'fs20', 35)" class="f">update</span> <span onmouseout="hideTip(event, 'fs21', 36)" onmouseover="showTip(event, 'fs21', 36)" class="i">msg</span> <span onmouseout="hideTip(event, 'fs10', 37)" onmouseover="showTip(event, 'fs10', 37)" class="i">state</span>  <span class="o">=</span> 
     <span class="k">match</span> <span onmouseout="hideTip(event, 'fs21', 38)" onmouseover="showTip(event, 'fs21', 38)" class="i">msg</span> <span class="k">with</span> 
     | <span onmouseout="hideTip(event, 'fs16', 39)" onmouseover="showTip(event, 'fs16', 39)" class="p">Increment</span> <span class="k">-&gt;</span> 
@@ -314,6 +314,73 @@ Breaking down parent state
 </code></pre></td>
 </tr>
 </table>
+</section>
+<section >
+<p><img src="images/loader.gif" alt="loader" /></p>
+</section>
+<section >
+<h3>Loading data from web api</h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">| <span class="i">LoadDrafts</span> <span class="k">-&gt;</span> 
+    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs12', 88)" onmouseover="showTip(event, 'fs12', 88)" class="i">state</span> <span class="k">with</span> <span class="i">Drafts</span> <span class="o">=</span> <span class="i">Loading</span> }
+    
+    <span class="k">let</span> <span class="i">loadDraftsCmd</span> <span class="o">=</span>
+        <span class="i">Cmd</span><span class="o">.</span><span class="i">fromAsync</span> { 
+            <span class="i">Value</span> <span class="o">=</span> <span class="i">Server</span><span class="o">.</span><span class="i">api</span><span class="o">.</span><span class="i">getDrafts</span> (<span class="i">SecurityToken</span>(<span class="i">authToken</span>))
+            <span class="i">Error</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">DraftsLoadingError</span> <span class="s">&quot;Network error occured&quot;</span>
+            <span class="i">Success</span> <span class="o">=</span> <span class="k">function</span> 
+              | <span class="i">Ok</span> <span class="i">drafts</span> <span class="k">-&gt;</span> <span class="i">DraftsLoaded</span> <span class="i">drafts</span>
+              | <span class="i">Error</span> <span class="i">authError</span> <span class="k">-&gt;</span> <span class="i">AuthenticationError</span> <span class="s">&quot;User was unauthorized&quot;</span>
+         }
+
+    <span class="i">nextState</span>, <span class="i">loadDraftsCmd</span>
+
+| <span class="i">DraftsLoaded</span> <span class="i">draftsFromServer</span> <span class="k">-&gt;</span> 
+    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs12', 89)" onmouseover="showTip(event, 'fs12', 89)" class="i">state</span> <span class="k">with</span> <span class="i">Drafts</span> <span class="o">=</span> <span class="i">Content</span> <span class="i">draftsFromServer</span> }
+    <span class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
+
+| <span class="i">DraftsLoadingError</span> <span class="i">errorMessage</span> <span class="k">-&gt;</span> 
+    <span class="k">let</span> <span class="i">nextState</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs12', 90)" onmouseover="showTip(event, 'fs12', 90)" class="i">state</span> <span class="k">with</span> <span class="i">Drafts</span> <span class="o">=</span> <span class="i">LoadError</span> <span class="i">errorMessage</span> }
+    <span class="i">nextState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
+<section >
+<h3>Larger: Combining the two programs</h3>
+<p><img src="images/combine-apps.png" alt="app" /></p>
+</section>
+<section >
+<h3>Design Principles</h3>
+<ul>
+<li>Child components don't know anything about their parents</li>
+<li>Child components don't know anything about their siblings</li>
+<li>Parent components manage child state and communication between children</li>
+</ul>
+</section>
+<section >
+<p><img src="images/parent-child.png" alt="parent-child" /></p>
 </section>
 
 
