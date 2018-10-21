@@ -78,7 +78,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 
 ### Introducing Commands
 
-- Async messages schedulers
+- Schedule async messages
 
 ***
 
@@ -89,7 +89,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
         | IncrementImmediate
         | IncrementDelayed 
 
-    // update : Msg -> State -> State * Cmd<Msg>
+    // update : Message -> State -> State * Cmd<Message>
     let update msg state  = 
         match msg with 
         | Increment -> 
@@ -115,6 +115,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 ***
 
 ***
+
     type State = 
         | Initial
         | Loading 
@@ -154,4 +155,65 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
             div [ ] 
                 [ showMessage message
                   makeButton (fun _ -> dispatch Reset) "Reset" ] 
+***
+
+***
+
+![loader](images/loader.gif)
+
+***
+
+***
+
+### Loading data from web api
+
+
+    | LoadDrafts -> 
+        let nextState = { state with Drafts = Loading }
+        
+        let loadDraftsCmd =
+            Cmd.fromAsync { 
+                Value = Server.api.getDrafts (SecurityToken(authToken))
+                Error = fun ex -> DraftsLoadingError "Network error occured"
+                Success = function 
+                  | Ok drafts -> DraftsLoaded drafts
+                  | Error authError -> AuthenticationError "User was unauthorized"
+             }
+
+        nextState, loadDraftsCmd
+
+    | DraftsLoaded draftsFromServer -> 
+        let nextState = { state with Drafts = Content draftsFromServer }
+        nextState, Cmd.none
+
+    | DraftsLoadingError errorMessage -> 
+        let nextState = { state with Drafts = LoadError errorMessage }
+        nextState, Cmd.none
+
+***
+
+
+
+***
+
+### Larger: Combining the two programs
+
+![app](images/combine-apps.png)
+
+***
+
+***
+
+### Design Principles
+
+ - Child components don't know anything about their parents
+ - Child components don't know anything about their siblings  
+ - Parent components manage child state and communication between children
+
+***
+
+***
+
+![parent-child](images/parent-child.png)
+
 ***
