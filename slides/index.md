@@ -22,24 +22,25 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 
 * Introduction
 * Basics of Elmish 
-* Concept of an "Elm program"
+* Concept of an "Elmish program"
 * Importance of commands
 * Larger programs 
 * Challenges of breaking down programs
    - Breaking down parent state  
        - Keeping state of a single child program
        - Keeping state of all children programs
-   - Child programs (updates, dispatch and commands)
+* Child programs 
+   - State updates
+   - dispatch 
+   - commands
 * Application concerns: Root level vs. deep children
-* Ongoing developements: the good and the lacking
+* Ongoing developements: the good, the bad and the ugly
 * Resources to learn more
-  
+
 ***
 
 ### Introduction
 
-- About me
-- The talk
 
 ***
 
@@ -196,7 +197,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 
 ***
 
-### Larger: Combining the two programs
+### Combining the two programs
 
 ![app](images/combine-apps.png)
 
