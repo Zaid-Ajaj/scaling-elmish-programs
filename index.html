@@ -115,8 +115,7 @@ Child programs
 <li>commands</li>
 </ul>
 </li>
-<li>Application concerns: Root level vs. deep children</li>
-<li>Ongoing developements: the good, the bad and the ugly</li>
+<li>Ongoing developement</li>
 <li>Resources to learn more</li>
 </ul>
 </section>
@@ -375,15 +374,73 @@ Child programs
 <p><img src="images/combine-apps.png" alt="app" /></p>
 </section>
 <section >
-<h3>Design Principles</h3>
+<h3>Start with spaghetti</h3>
 <ul>
-<li>Child components don't know anything about their parents</li>
-<li>Child components don't know anything about their siblings</li>
-<li>Parent components manage child state and communication between children</li>
+<li>Divide and conquer</li>
+<li>Demo time!</li>
 </ul>
 </section>
 <section >
 <p><img src="images/parent-child.png" alt="parent-child" /></p>
+</section>
+<section >
+<h3>Division Patterns</h3>
+<ul>
+<li>Keep state of all children</li>
+<li>Keep state a single child</li>
+</ul>
+</section>
+<section >
+<h3>Recommended Directory Structure</h3>
+</section>
+<section >
+<h3>Design Principles</h3>
+<ul>
+<li>Child components don't know anything about their parents</li>
+<li>Child components don't know anything about their siblings</li>
+<li>Parent components manage child states and communication between children</li>
+</ul>
+<h3>Pro</h3>
+<ul>
+<li>End up with modular application</li>
+<li>isolated components are easier to reason with</li>
+<li>isolated components cannot change state outside of their "program"</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li>Explicit wiring of children with their parents</li>
+<li>Explicit data communication between children</li>
+</ul>
+</section>
+<section >
+<h3>But components are not always isolated!!!</h3>
+<ul>
+<li>Communication between sibling components</li>
+<li>"Intercept and propagate" pattern</li>
+<li>Make distinction between "internal" and "external" messages</li>
+</ul>
+</section>
+<section >
+<h3>Ongoing developement</h3>
+<ul>
+<li>Fable &amp; Fable.React bindings</li>
+<li>Documentation</li>
+<li>Other platforms (Electron, React Native, Node.js, Cordova)</li>
+<li>Your help is needed: PRs are always welcome</li>
+</ul>
+</section>
+<section >
+<h3>Resources to learn more</h3>
+<ul>
+<li>Slides and apps used at <a href="https://github.com/Zaid-Ajaj/scaling-elmish-programs">https://github.com/Zaid-Ajaj/scaling-elmish-programs</a></li>
+<li>Tabula-rasa project at <a href="https://github.com/Zaid-Ajaj/tabula-rasa">https://github.com/Zaid-Ajaj/tabula-rasa</a></li>
+<li>fulma-demo at <a href="https://github.com/MangelMaxime/fulma-demo">https://github.com/MangelMaxime/fulma-demo</a></li>
+</ul>
+<h3>Starter templates</h3>
+<ul>
+<li>Hello world Fable project at <a href="https://github.com/Zaid-Ajaj/fable-getting-started">https://github.com/Zaid-Ajaj/fable-getting-started</a></li>
+<li>Hello world Fable/Elmish project <a href="https://github.com/Zaid-Ajaj/elmish-getting-started">https://github.com/Zaid-Ajaj/elmish-getting-started</a></li>
+</ul>
 </section>
 
 
