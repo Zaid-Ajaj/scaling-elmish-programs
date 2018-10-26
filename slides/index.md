@@ -212,9 +212,21 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 
 ***
 
+### Data communication and updates
+
 ![parent-child](images/parent-child.png)
 
 ***
+
+
+***
+
+### Where to are messages dispatched?
+
+![runtime](images/runtime.png)
+
+***
+
 
 
 ***
@@ -224,6 +236,8 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 - Keep state a single child
 
 ***
+
+
 
 ***
 
