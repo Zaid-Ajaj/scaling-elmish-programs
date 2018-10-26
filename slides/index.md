@@ -33,8 +33,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
    - State updates
    - dispatch 
    - commands
-* Application concerns: Root level vs. deep children
-* Ongoing developements: the good, the bad and the ugly
+* Ongoing developement 
 * Resources to learn more
 
 ***
@@ -204,17 +203,86 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
 ***
 
 ***
+### Start with spaghetti
+- Divide and conquer 
+- Demo time!
+  
+***
+
+
+***
+
+![parent-child](images/parent-child.png)
+
+***
+
+
+***
+
+### Division Patterns
+- Keep state of all children   
+- Keep state a single child
+
+***
+
+***
+
+### Recommended Directory Structure 
+
+***
+
+
+***
 
 ### Design Principles
 
  - Child components don't know anything about their parents
  - Child components don't know anything about their siblings  
- - Parent components manage child state and communication between children
+ - Parent components manage child states and communication between children
+
+### Pro
+- End up with modular application 
+- isolated components are easier to reason with
+- isolated components cannot change state outside of their "program"
+
+### Cons 
+- Explicit wiring of children with their parents 
+- Explicit data communication between children
 
 ***
 
 ***
 
-![parent-child](images/parent-child.png)
+### But components are not always isolated!!!
+
+- Communication between sibling components
+- "Intercept and propagate" pattern
+- Make distinction between "internal" and "external" messages
+
+***
+
+***
+
+### Ongoing developement
+
+- Fable & Fable.React bindings 
+- Documentation
+- Other platforms (Electron, React Native, Node.js, Cordova)
+- Your help is needed: PRs are always welcome
+
+***
+
+***
+
+### Resources to learn more
+
+- Slides and apps used at https://github.com/Zaid-Ajaj/scaling-elmish-programs 
+- Tabula-rasa project at https://github.com/Zaid-Ajaj/tabula-rasa
+- fulma-demo at https://github.com/MangelMaxime/fulma-demo
+
+
+### Starter templates 
+- Hello world Fable project at https://github.com/Zaid-Ajaj/fable-getting-started
+- Hello world Fable/Elmish project https://github.com/Zaid-Ajaj/elmish-getting-started
 
 ***

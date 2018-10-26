@@ -8,48 +8,58 @@ open Fable.Helpers.React.Props
 type Page = 
     | Counter 
     | Loader 
+    | Settings
 
 type State = {
     CurrentPage : Page 
     Counter : Counter.State 
     Loader : Loader.State 
+    Settings : Settings.State
 }
 
 type Message = 
     | CounterMsg of Counter.Msg
     | LoaderMsg of Loader.Msg
+    | SettingMsg of Settings.Msg 
     | NavigateTo of Page
 
-
 let init() = 
-    let initialCounter, initialCounterCmd = Counter.init()
-    let initialLoader, initialLoaderCmd = Loader.init()
-    let initialState = {
-        Counter = initialCounter
-        Loader = initialLoader 
+    let initCounter, counterCmd = Counter.init()
+    let initLoader, loaderCmd = Loader.init()
+    let initSettings, settingsCmd = Settings.init() 
+    let initState = {
+        Counter = initCounter
+        Loader = initLoader 
+        Settings = initSettings
         CurrentPage = Counter
     }
 
-    let initialCmd = 
-        Cmd.batch [
-            Cmd.map CounterMsg initialCounterCmd
-            Cmd.map LoaderMsg initialLoaderCmd
-        ]
+    let initCmd = Cmd.batch [
+        Cmd.map CounterMsg counterCmd
+        Cmd.map LoaderMsg loaderCmd
+        Cmd.map SettingMsg settingsCmd
+    ]
 
-    initialState, initialCmd
+    initState, initCmd
 
 let update msg prevState = 
     match msg with
     | CounterMsg counterMsg ->
         let nextCounterState, nextCounterCmd = Counter.update counterMsg prevState.Counter 
-        let appState = { prevState with Counter = nextCounterState }
-        appState, Cmd.map CounterMsg nextCounterCmd
+        let nextState = { prevState with Counter = nextCounterState }
+        nextState, Cmd.map CounterMsg nextCounterCmd
 
     | LoaderMsg loaderMsg ->
         let nextLoaderState, nextLoadecCmd = Loader.update loaderMsg prevState.Loader
-        let appState= { prevState with Loader = nextLoaderState }
-        appState, Cmd.map LoaderMsg nextLoadecCmd 
+        let nextState = { prevState with Loader = nextLoaderState }
+        nextState, Cmd.map LoaderMsg nextLoadecCmd 
  
+    | SettingMsg settingMsg -> 
+        // TODO, propagate messages
+        let nextSettings, settingCmd = Settings.update settingMsg prevState.Settings 
+        let nextState = { prevState with Settings = nextSettings }
+        nextState, Cmd.map SettingMsg settingCmd
+
     | NavigateTo page ->
         let nextState = { prevState with CurrentPage = page }
         nextState, Cmd.none
@@ -72,18 +82,18 @@ let render state dispatch =
 
     let currentPage = 
         match state.CurrentPage with 
-        | Page.Counter -> 
-            Counter.view state.Counter (CounterMsg >> dispatch)
-        | Page.Loader ->
-            Loader.view state.Loader (LoaderMsg >> dispatch)  
+        | Page.Counter -> Counter.view state.Counter (CounterMsg >> dispatch)
+        | Page.Loader -> Loader.view state.Loader (LoaderMsg >> dispatch)  
+        | Page.Settings -> Settings.view state.Settings (SettingMsg >> dispatch)
 
     div [ Style [ Padding 20 ] ] [ 
-        h1 [ ] [ str "Refactored Spaghetti" ]
+        h1 [ ] [ str "Lonely Siblings :(" ]
         divider
 
         ul [ ClassName "nav nav-tabs" ] [
             navItem Page.Counter "Counter"
             navItem Page.Loader "Loader"
+            navItem Page.Settings "Settings"
         ]
 
         divider
