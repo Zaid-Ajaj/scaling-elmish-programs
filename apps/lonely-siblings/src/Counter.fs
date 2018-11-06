@@ -31,5 +31,5 @@ let view state dispatch =
         makeButton (fun _ -> dispatch IncrementDelayed) "Increment Delayed"
 
         br [ ] 
-        h1 [ Style [ MarginLeft 150 ] ] [ str (sprintf "%d" state.Count) ]
+        h1 [ Style [ MarginLeft 150 ] ] [ ofInt state.Count ]
     ]      

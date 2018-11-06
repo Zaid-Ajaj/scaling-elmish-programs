@@ -28,8 +28,8 @@ let update msg state =
         let nextState = State.Loaded data 
         nextState, Cmd.none 
          
-    | _ ->
-        state, Cmd.none 
+    | Reset ->
+        State.Initial, Cmd.none 
 
 let spinner = 
     div [  ] [

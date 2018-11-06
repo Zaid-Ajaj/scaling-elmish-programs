@@ -64,7 +64,7 @@ Zaid Ajaj - [@zaid-ajaj](http://www.twitter.com/zaid-ajaj)
             button [ OnClick (fun _ -> dispatch Decrement) ]
                    [ str "Decrement" ]
             h1 [ ] 
-               [ str (sprintf "%d" state.Count) ] 
+               [ ofInt state.Count ] 
         ]
 
 
