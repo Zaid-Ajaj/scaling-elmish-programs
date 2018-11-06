@@ -29,7 +29,7 @@ let view state dispatch =
       button [ OnClick (fun _ -> dispatch (ChangeFactor n))
                Style [ Margin 10 ]
                ClassName buttonClass ] 
-             [ str (sprintf "%d" n) ] 
+             [ ofInt n ] 
     
     div [ ] [ 
         factorBtn 1
